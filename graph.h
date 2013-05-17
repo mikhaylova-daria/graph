@@ -29,14 +29,14 @@ struct Edge {
         weight = edg.weight;
         return (*this);
     }
-    friend std::istream& operator>> (std::istream& istr, Edge<U> & edr){
+    friend std::istream& operator >> (std::istream& istr, Edge<U> & edr){
         istr >> edr.first_v >> edr.second_v >> edr.weight;
         edr.id = ((edr.first_v + edr.second_v)* (edr.first_v + edr.second_v) + 3 * edr.first_v + edr.second_v)/2 ;
         return istr;
     }
 
     friend std::ostream& operator << (std::ostream& ostr, Edge<U> const & edr) {
-        ostr << edr.id << " " << edr.first_v << "-" << edr.second_v <<" "<< edr.weight<<'\n';
+        ostr <<"№"<< edr.id << " " << edr.first_v << "-" << edr.second_v <<" : "<< edr.weight<<'\n';
         return ostr;
     }
 
@@ -63,8 +63,8 @@ struct Vetex {
         return istr;
     }
 
-    friend std::ostream& operator << (std::ostream& ostr, Vetex<T> const & vtx) {
-        ostr << vtx.id << " " << vtx.value << '\n';
+    friend std::ostream& operator << (std::ostream& ostr, Vetex<T> const & vtx)  {
+        ostr << vtx.id << " (" << vtx.value << ")\n";
         return ostr;
     }
 };
@@ -83,6 +83,26 @@ public:
     bool add_edg(const Edge<U> & _edg);
     bool rem_vtx (const int & _id);
     void erase (const int &_id);
+
+    friend std::istream& operator >>  (std::istream& istr, Graph<T, U> & gr){
+
+
+        return istr;
+    }
+
+    friend std::ostream& operator << (std::ostream& ostr,const Graph<T, U> & gr)  {
+        typename map  <int, Edge<U> > ::const_iterator itr;
+        for (itr = gr.map_edg.begin(); itr != gr.map_edg.end(); ++itr) {
+            typename map<int, Vetex<T> >::const_iterator itr_1;
+            itr_1 = gr.map_vtx.find((*itr).second.first_v);
+            typename map<int, Vetex<T> >::const_iterator itr_2;
+            itr_2 = gr.map_vtx.find((*itr).second.second_v);
+            T value_1 = (*itr_1).second.value;
+            T value_2 = (*itr_2).second.value;
+            ostr <<"№"<< (*itr).second.id << " " << (*itr).second.first_v <<'('<<value_1<<')'<< "-" << (*itr).second.second_v <<'('<<value_2<<')'<<" : "<< (*itr).second.weight<<'\n';
+        }
+        return ostr;
+    }
 };
     //Добавление вершины
 template < typename T, typename U>
@@ -103,17 +123,16 @@ template < typename T, typename U>
         pair<int, Edge<U> > edg;
         edg.first = _edg.id;
         edg.second = _edg;
-        if (map_edg.insert(edg).second == true) { // добавили в сет графов
-            typename map<int, Vetex<T> >::iterator itr;// = map_vtx.find(_first);
-            if (itr == map_vtx.end()) {
-                throw ("unknown_vetex");
-                return false;
-            }
-            if ((itr->second.list.insert(_edg.second_v)).second == false) { //вставили в список для вершины начала вторую вершину
-                throw ("recurring_id");
-                return false;
-            }
+        typename map<int, Vetex<T> >::iterator itr_1, itr_2;
+        itr_1 = map_vtx.find(edg.second.first_v);
+        itr_2 = map_vtx.find(edg.second.second_v);
+        if (itr_1 == map_vtx.end() || itr_2 == map_vtx.end()) {
+            throw ("unknown_vetex");
         }
+        if ((itr_1->second.list.insert(edg.second.second_v)).second == false) { //вставили в список для вершины начала вторую вершину, кратные рёбра запрещены
+            throw ("recurring_id");
+        }
+        map_edg.insert(edg).second; // добавили в мэп графов
         return true;
     }
 

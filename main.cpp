@@ -10,12 +10,17 @@ int main()
     cin>>c;
     cout<<c;
     Edge <int> a;
-    cin>> a;
+    cin >> a;
     cout<< a;
     Graph<int, int> x;
     x.add_vtx(b);
+    //cout<<"!"<<endl;
     x.add_vtx(c);
+    //cout<<"!"<<endl;
     x.add_edg(a);
+
+    //cout<<"!"<<endl;
+    cout<<x;
     x.rem_vtx(b.id);
     return 0;
 }
