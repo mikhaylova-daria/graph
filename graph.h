@@ -46,7 +46,8 @@ template <typename T>
 struct Vetex {
     int id;
     T value;
-    list_adjacency list;
+    list_adjacency list_as_start;
+    list_adjacency list_as_finish;
     Vetex(){;}
     Vetex(int _id, T _value): id(_id), value(_value){;}
     bool operator == (const Vetex & vtx) const { return (id == vtx.id); }
@@ -55,7 +56,8 @@ struct Vetex {
     Vetex & operator = (const Vetex & vtx){
         id = vtx.id;
         value = vtx.value;
-        list = vtx.list;
+        list_as_start = vtx.list_as_start;
+        list_as_finish = vtx.list_as_finish;
         return (*this);
     }
     friend std::istream& operator >>  (std::istream& istr, Vetex<T> & vtx){
@@ -153,7 +155,10 @@ template < typename T, typename U>
         if (itr_1 == map_vtx.end() || itr_2 == map_vtx.end()) {
             throw ("unknown_vetex");
         }
-        if ((itr_1->second.list.insert(edg.second.second_v)).second == false) { //вставили в список для вершины начала вторую вершину, кратные рёбра запрещены
+        if ((itr_1->second.list_as_start.insert(edg.second.second_v)).second == false) { //вставили в список для вершины начала вторую вершину, кратные рёбра запрещены
+            throw ("recurring_id");
+        }
+        if ((itr_2->second.list_as_finish.insert(edg.second.first_v)).second == false) { //вставили в список для вершины начала вторую вершину, кратные рёбра запрещены
             throw ("recurring_id");
         }
         map_edg.insert(edg).second; // добавили в мэп графов
@@ -169,15 +174,20 @@ template < typename T, typename U>
              return false;
          } else {
              typename list_adjacency::iterator itr_i;
-            /* itr_i = (*itr_id).second.list.begin();
-             for (; itr_i != (*itr_id).second.list.end(); ++itr_i) {
+             itr_i = (*itr_id).second.list_as_start.begin();
+             for (; itr_i != (*itr_id).second.list_as_start.end(); ++itr_i) {
                  map_edg.erase((((_id + (*itr_i))* (_id + (*itr_i)) + 3 * _id + (*itr_i))/2));
-             }*/
-             typename map <int, Vetex <T> >::iterator itr_j;
-             for (itr_j = map_vtx.begin(); itr_j != map_vtx.end(); ++itr_j){
-                  map_edg.erase((((_id + (*itr_j).second.id)* (_id + (*itr_j).second.id) + 3 * _id + (*itr_j).second.id)/2));
-                  map_edg.erase(((((*itr_j).second.id + (_id))* ((*itr_j).second.id + (_id)) + 3 * (*itr_j).second.id + (_id))/2));
              }
+             typename list_adjacency::iterator itr_j;
+             itr_j = (*itr_id).second.list_as_finish.begin();
+             for (; itr_j != (*itr_id).second.list_as_finish.end(); ++itr_j) {
+                 map_edg.erase((((_id + (*itr_j))* (_id + (*itr_j)) + 3 * _id + (*itr_j))/2));
+             }
+//             typename map <int, Vetex <T> >::iterator itr_j;
+//             for (itr_j = map_vtx.begin(); itr_j != map_vtx.end(); ++itr_j){
+//                  map_edg.erase((((_id + (*itr_j).second.id)* (_id + (*itr_j).second.id) + 3 * _id + (*itr_j).second.id)/2));
+//                  map_edg.erase(((((*itr_j).second.id + (_id))* ((*itr_j).second.id + (_id)) + 3 * (*itr_j).second.id + (_id))/2));
+//             }
              return true;
          }
      }
