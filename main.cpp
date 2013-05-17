@@ -24,6 +24,8 @@ int main()
     cout<<x<<'\n';
     x.transpose();
     cout<<x;
+    list<Vetex<int> > list_vtx;
+    list_vtx = x.get_vetices();
     return 0;
 }
 

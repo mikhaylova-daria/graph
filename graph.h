@@ -5,6 +5,7 @@
 #include <map>
 #include <set>
 #include <algorithm>
+#include <list>
 using namespace std;
 template <typename U> struct Edge;
 template <typename T> struct Vetex;
@@ -86,7 +87,12 @@ public:
     bool rem_vtx (const int & _id);
     void rem_edg (const int &_id_first, const int &_id_second);
     void transpose();
-
+    std::list<Vetex<T> > get_vetices();
+    std::list<Vetex<T> > get_vetices_outbox(int);
+    std::list<Vetex<T> > get_vetices_inbox(int);
+    std::list<Edge<U> > get_edges();
+    std::list<Edge<U> > get_edges_inbox( int);
+    std::list<Edge<U> > get_edges_outbox(int);
     friend std::istream& operator >>  (std::istream& istr, Graph<T, U> & gr){
         std::cout<<"Введите количество вершин, затем вводите вершины в формате : индекс, значение через пробел:\n";
         int n;
@@ -213,4 +219,52 @@ template < typename T, typename U>
               this->map_edg = new_map_edg;
               return;
           }
+
+   template < typename T, typename U>
+          std::list<Vetex<T> > Graph<T, U>::get_vetices(){
+              typename map <int, Vetex<T> > ::iterator itr;
+              std::list<Vetex<T> > answer;
+              for (itr = map_vtx.begin(); itr != map_vtx.end(); ++itr) {
+                  answer.push_back((*itr).second);
+              }
+              return answer;
+          }
+
+   template < typename T, typename U>
+          std::list<Vetex<T> > Graph<T, U>::get_vetices_outbox(int id){
+             typename map <int, Vetex<T> > ::iterator itr;
+              itr = map_vtx.find(id);
+              std::list<Vetex<T> > answer((*itr).second.list_as_start.begin(), (*itr).second.list_as_start.end());
+              return answer;
+          }
+
+   template < typename T, typename U>
+          std::list<Vetex<T> > Graph<T, U>::get_vetices_inbox(int id){
+              typename map <int, Vetex<T> > ::iterator itr;
+               itr = map_vtx.find(id);
+               std::list<Vetex<T> > answer((*itr).second.list_as_finish.begin(), (*itr).second.list_as_finish.end());
+               return answer;
+          }
+
+ /*  template < typename T, typename U>
+          std::list<Edge<U> > Graph<T, U>::get_edges_outbox(int id){
+
+          }
+
+   template < typename T, typename U>
+          std::list<Edge<U> > Graph<T, U>::get_edges_inbox(int id){
+
+
+          }*/
+
+   template < typename T, typename U>
+          std::list<Edge<U> > Graph<T, U>::get_edges(){
+                  typename map <int, Edge<U> > ::iterator itr;
+                  std::list<Edge<U> > answer;
+                  for (itr = map_edg.begin(); itr != map_edg.end(); ++itr) {
+                      answer.push_back((*itr).second);
+                  }
+                  return answer;
+              }
+
 #endif // GRAPH_H
