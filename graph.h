@@ -169,9 +169,14 @@ template < typename T, typename U>
              return false;
          } else {
              typename list_adjacency::iterator itr_i;
-             itr_i = (*itr_id).second.list.begin();
+            /* itr_i = (*itr_id).second.list.begin();
              for (; itr_i != (*itr_id).second.list.end(); ++itr_i) {
                  map_edg.erase((((_id + (*itr_i))* (_id + (*itr_i)) + 3 * _id + (*itr_i))/2));
+             }*/
+             typename map <int, Vetex <T> >::iterator itr_j;
+             for (itr_j = map_vtx.begin(); itr_j != map_vtx.end(); ++itr_j){
+                  map_edg.erase((((_id + (*itr_j).second.id)* (_id + (*itr_j).second.id) + 3 * _id + (*itr_j).second.id)/2));
+                  map_edg.erase(((((*itr_j).second.id + (_id))* ((*itr_j).second.id + (_id)) + 3 * (*itr_j).second.id + (_id))/2));
              }
              return true;
          }
