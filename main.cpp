@@ -20,6 +20,7 @@ int main()
     x.add_edg(a);
 
     //cout<<"!"<<endl;
+    cin>>x;
     cout<<x;
     x.rem_vtx(b.id);
     return 0;

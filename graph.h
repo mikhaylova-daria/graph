@@ -85,8 +85,32 @@ public:
     void erase (const int &_id);
 
     friend std::istream& operator >>  (std::istream& istr, Graph<T, U> & gr){
+        std::cout<<"Введите количество вершин, затем вводите вершины в формате : индекс, значение через пробел:\n";
+        int n;
+        istr>>n;
+        for (int i = 0; i < n; ++i) {
+            Vetex<T> vtx;
+            istr >> vtx;
+            try {
+                gr.add_vtx(vtx);
+            } catch (const char * &a){
+                cerr<<a<<" : try again\n";
+                --i;
+            }
+        }
+        std::cout<<"Введите количество рёбер, затем рёбра в формате: номер вершины начала, номер вершины к конца и вес через пробел\n";
+        istr>>n;
+        for (int i = 0; i < n; ++i) {
+            Edge<U> edg;
+            istr >> edg;
 
-
+            try {
+                gr.add_edg(edg);
+            } catch (const char * &a){
+                cerr<<a<<" : try again\n";
+                --i;
+            }
+        }
         return istr;
     }
 
