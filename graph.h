@@ -84,7 +84,8 @@ public:
     bool add_vtx(const Vetex <T> &_vtx);
     bool add_edg(const Edge<U> & _edg);
     bool rem_vtx (const int & _id);
-    void erase (const int &_id);
+    void rem_edg (const int &_id_first, const int &_id_second);
+    void transpose();
 
     friend std::istream& operator >>  (std::istream& istr, Graph<T, U> & gr){
         std::cout<<"Введите количество вершин, затем вводите вершины в формате : индекс, значение через пробел:\n";
@@ -183,15 +184,33 @@ template < typename T, typename U>
              for (; itr_j != (*itr_id).second.list_as_finish.end(); ++itr_j) {
                  map_edg.erase((((_id + (*itr_j))* (_id + (*itr_j)) + 3 * _id + (*itr_j))/2));
              }
-//             typename map <int, Vetex <T> >::iterator itr_j;
-//             for (itr_j = map_vtx.begin(); itr_j != map_vtx.end(); ++itr_j){
-//                  map_edg.erase((((_id + (*itr_j).second.id)* (_id + (*itr_j).second.id) + 3 * _id + (*itr_j).second.id)/2));
-//                  map_edg.erase(((((*itr_j).second.id + (_id))* ((*itr_j).second.id + (_id)) + 3 * (*itr_j).second.id + (_id))/2));
-//             }
              return true;
          }
      }
 
+//удаление ребра по двум вершинам
+template < typename T, typename U>
+     void Graph<T, U>::rem_edg (const int &_id_first, const int &_id_second) {
+         map_edg.erase((((_id_first + (_id_second))* (_id_first + (_id_second)) + 3 * _id_first + (_id_second))/2));
+         return;
+     }
 
-
+//Транспонирование
+     template < typename T, typename U>
+          void Graph<T, U>::transpose () {
+              typename map <int, Vetex<T> >::iterator itr;
+              itr = map_vtx.begin();
+              for (; itr != map_vtx.end(); ++ itr) {
+                  std::swap ((*itr).second.list_as_start, (*itr).second.list_as_finish);
+              }
+              typename map <int, Edge<U> >::iterator itr_edg;
+              itr_edg = map_edg.begin();
+              map <int, Edge<U> > new_map_edg;
+              for (; itr_edg != map_edg.end(); ++ itr_edg) {
+                  Edge<U> edg((*itr_edg).second.second_v, (*itr_edg).second.first_v, (*itr_edg).second.weight);
+                  new_map_edg.insert(pair<int, Edge<U> >(edg.id, edg));
+              }
+              this->map_edg = new_map_edg;
+              return;
+          }
 #endif // GRAPH_H

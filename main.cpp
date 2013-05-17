@@ -21,9 +21,8 @@ int main()
 
     //cout<<"!"<<endl;
     cin>>x;
-    cout<<x;
-    x.rem_vtx(2);
-    cout<<"!";
+    cout<<x<<'\n';
+    x.transpose();
     cout<<x;
     return 0;
 }
