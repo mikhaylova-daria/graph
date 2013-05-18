@@ -134,6 +134,12 @@ public:
             T value_2 = (*itr_2).second.value;
             ostr <<"№"<< (*itr).second.id << " " << (*itr).second.first_v <<'('<<value_1<<')'<< "-" << (*itr).second.second_v <<'('<<value_2<<')'<<" : "<< (*itr).second.weight<<'\n';
         }
+        typename map <int, Vetex<T> >::const_iterator itr_vtx;
+        for (itr_vtx = gr.map_vtx.begin(); itr_vtx != gr.map_vtx.end(); ++itr_vtx){
+            if ((*itr_vtx).second.list_as_start.empty() && (*itr_vtx).second.list_as_finish.empty()) {
+                ostr << "free_vertex :" << (*itr_vtx).second;
+            }
+        }
         return ostr;
     }
 };
@@ -219,7 +225,7 @@ template < typename T, typename U>
               this->map_edg = new_map_edg;
               return;
           }
-
+// список вершин
    template < typename T, typename U>
           std::list<Vetex<T> > Graph<T, U>::get_vetices(){
               typename map <int, Vetex<T> > ::iterator itr;
@@ -230,6 +236,7 @@ template < typename T, typename U>
               return answer;
           }
 
+          // список исходящих вершин
    template < typename T, typename U>
           std::list<Vetex<T> > Graph<T, U>::get_vetices_outbox(int id){
              typename map <int, Vetex<T> > ::iterator itr;
@@ -239,7 +246,6 @@ template < typename T, typename U>
                   cout << "unknown_vetex\n";
                   return answer;
               }
-
               list_adjacency::iterator itr_i;
               itr_i= (*itr).second.list_as_start.begin();
               for (; itr_i != (*itr).second.list_as_start.end(); ++itr_i) {
@@ -250,6 +256,7 @@ template < typename T, typename U>
               return answer;
           }
 
+          // список входящих вершин
    template < typename T, typename U>
           std::list<Vetex<T> > Graph<T, U>::get_vetices_inbox(int id){
              typename map <int, Vetex<T> > ::iterator itr;
@@ -259,7 +266,6 @@ template < typename T, typename U>
                   cout << "unknown_vetex\n";
                   return answer;
               }
-
               list_adjacency::iterator itr_i;
               itr_i= (*itr).second.list_as_finish.begin();
               for (; itr_i != (*itr).second.list_as_finish.end(); ++itr_i) {
@@ -270,18 +276,50 @@ template < typename T, typename U>
               return answer;
           }
 
-  /* template < typename T, typename U>
+          // список исходящих рёбер
+   template < typename T, typename U>
           std::list<Edge<U> > Graph<T, U>::get_edges_outbox(int id){
+              typename map <int, Vetex<T> > ::iterator itr;
+               std::list<Edge<U> > answer;
+               itr = map_vtx.find(id);
+               if (itr == map_vtx.end()) {
+                   cout << "unknown_vetex\n";
+                   return answer;
+               }
+               list_adjacency::iterator itr_i;
+               itr_i= (*itr).second.list_as_start.begin();
+               for (; itr_i != (*itr).second.list_as_start.end(); ++itr_i) {
+                   typename map <int, Edge<U> >::iterator itr_id;
+                   int id_2 = (*itr_i);
+                   itr_id = map_edg.find((((id + (id_2))* (id + (id_2)) + 3 * id + (id_2))/2));
+                   answer.push_back((*itr_id).second);
+               }
+               return answer;
+          }
 
+          // список входящих рёбер
+   template < typename T, typename U>
+          std::list<Edge<U> > Graph<T, U>::get_edges_inbox(int id){
+              typename map <int, Vetex<T> > ::iterator itr;
+               std::list<Edge<U> > answer;
+               itr = map_vtx.find(id);
+               if (itr == map_vtx.end()) {
+                   cout << "unknown_vetex\n";
+                   return answer;
+               }
+               list_adjacency::iterator itr_i;
+               itr_i= (*itr).second.list_as_finish.begin();
+               for (; itr_i != (*itr).second.list_as_finish.end(); ++itr_i) {
+                   typename map <int, Edge<U> >::iterator itr_id;
+                   int id_2 = (*itr_i);
+                   itr_id = map_edg.find((((id + (id_2))* (id + (id_2)) + 3 * id + (id_2))/2));
+                   answer.push_back((*itr_id).second);
+               }
+               return answer;
 
           }
 
-   template < typename T, typename U>
-          std::list<Edge<U> > Graph<T, U>::get_edges_inbox(int id){
-
-
-          }*/
-
+          //список рёбер
    template < typename T, typename U>
           std::list<Edge<U> > Graph<T, U>::get_edges(){
                   typename map <int, Edge<U> > ::iterator itr;

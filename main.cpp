@@ -29,27 +29,39 @@ int main()
 //    //cout<<"!"<<endl;
 //    x.add_edg(a);
 
-    //cout<<"!"<<endl;
     cin>>x;
+
+    cout<<"\ncout<<\n";
     cout<<x<<'\n';
+
+    cout<<"\nx.transpose():\n";
     x.transpose();
     cout<<x;
 
     list<Vetex<int> > list_vtx;
-    cout<<"\nx.get_vetices:\n";
+    cout<<"\nx.get_vetices():\n";
     list_vtx = x.get_vetices();
     for_each(list_vtx.begin(), list_vtx.end(), show_vtx);
 
-    cout<<"\nx.get_vetices_inbox:\n";
+    cout<<"\nx.get_vetices_inbox(1):\n";
     list_vtx = x.get_vetices_inbox(1);
     for_each(list_vtx.begin(), list_vtx.end(), show_vtx);
 
-    cout<<"\nx.get_vetices_outbox:\n";
+    cout<<"\nx.get_vetices_outbox(1):\n";
     list_vtx = x.get_vetices_outbox(1);
     for_each(list_vtx.begin(), list_vtx.end(), show_vtx);
 
+    cout<<"\nx.get_edges():\n";
     list<Edge<int> > list_edg;
     list_edg = x.get_edges();
+    for_each(list_edg.begin(), list_edg.end(), show_edg);
+
+    cout<<"\nx.get_edges_inbox(1):\n";
+    list_edg = x.get_edges_inbox(1);
+    for_each(list_edg.begin(), list_edg.end(), show_edg);
+
+    cout<<"\nx.get_edges_outbox(1):\n";
+    list_edg = x.get_edges_outbox(1);
     for_each(list_edg.begin(), list_edg.end(), show_edg);
 
     return 0;
