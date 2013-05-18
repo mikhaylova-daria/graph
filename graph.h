@@ -413,7 +413,7 @@ template < typename T, typename U>
                      typename vector <Vetex<T> *>::iterator current;
 
                      void DFS_visit(Vetex<T>* x){
-                         tree_DFS.push(x);
+                         tree_DFS.push_back(x);
                          list_adjacency list_as_start_of_current_gray_vtx = x->list_as_start;
                          list_adjacency::iterator itr_i;
                          for (itr_i = list_as_start_of_current_gray_vtx.begin(); itr_i != list_as_start_of_current_gray_vtx.end(); ++itr_i){
@@ -430,21 +430,17 @@ template < typename T, typename U>
                      }
 
                  public :
-                         iterator_DFS(Graph<T, U> * _gr,int id):gr(_gr) {
-                              Vetex <T> * p_vtx;
-                              typename map <int, Vetex<T> >::iterator itr;
-                              itr = gr->map_vtx.find(id);
-                              p_vtx =& (itr->second);
-                              list_adjacency list_as_start_of_current_gray_vtx = p_vtx->list_as_start;
-                              list_adjacency::iterator itr_i;
-                              for (itr_i = list_as_start_of_current_gray_vtx.begin(); itr_i != list_as_start_of_current_gray_vtx.end(); ++itr_i){
-                                  typename map <int, Vetex<T> >::iterator itr_j;
-                                  itr_j = gr->map_vtx.find(*itr_i);
-                                  Vetex<T> * p_vtx_1 = & (itr_j->second);
+                         iterator_DFS(Graph<T, U> * _gr):gr(_gr) {
+//                              Vetex <T> * p_vtx;
+//                              list_adjacency list_as_start_of_current_gray_vtx = p_vtx->list_as_start;
+//                              list_adjacency::iterator itr_i;
+                              typename map<int, Vetex<T> >::iterator itr_i;
+                              for (itr_i = gr->map_vtx.begin(); itr_i != gr->map_vtx.end(); ++itr_i){
+                                  Vetex<T> * p_vtx = & (itr_i->second);
                                   typename vector <Vetex<T> *>::iterator vector_iterator;
-                                  vector_iterator = find(tree_DFS.begin(), tree_DFS.end(), p_vtx_1);
+                                  vector_iterator = find(tree_DFS.begin(), tree_DFS.end(), p_vtx);
                                   if (vector_iterator == tree_DFS.end()) { // если её ещё нет в дереве, значит вершина белая
-                                      DFS_visit(p_vtx_1);
+                                      DFS_visit(p_vtx);
                                   }
                               }
                               current = tree_DFS.begin(); // поставили текущую вершину на начало

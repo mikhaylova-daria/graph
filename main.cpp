@@ -94,10 +94,17 @@ int main()
     cout<<"\ncout<<\n";
     cout<<x<<'\n';
 
-    Graph<char, int>::iterator_BFS itr(&x, 2);
-    for (;itr != itr.end(); ++itr)
+    Graph<char, int>::iterator_BFS itr_BFS(&x, 2);
+    for (;itr_BFS != itr_BFS.end(); ++itr_BFS)
     {
-            cout<<(*itr);
+            cout<<(*itr_BFS);
+    }
+
+    cout << "\n";
+    Graph<char, int>::iterator_DFS itr_DFS(&x);
+    for (;itr_DFS != itr_DFS.end(); ++itr_DFS)
+    {
+            cout<<(*itr_DFS);
     }
 
     return 0;
