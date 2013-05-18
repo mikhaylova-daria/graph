@@ -20,7 +20,8 @@ struct Edge {
     int second_v;
     U weight;
     Edge(){;}
-    Edge (int _first_v, int _second_v, U _weight):id(((_first_v + _second_v) * (_first_v + _second_v) + 3 * _first_v + _second_v)/2 ), first_v(_first_v), second_v(_second_v), weight( _weight){;}
+    Edge (int _first_v, int _second_v, U _weight):id(((_first_v + _second_v) * (_first_v + _second_v) + 3 * _first_v + _second_v)/2 ),
+                                                                            first_v(_first_v), second_v(_second_v), weight( _weight){;}
     bool operator == (const Edge& edg) const{ return (id == edg.id); }
     bool operator < (const Edge &edg) const { return (id < edg.id); }
     Edge & operator = (const Edge & edg){
@@ -132,7 +133,8 @@ public:
             itr_2 = gr.map_vtx.find((*itr).second.second_v);
             T value_1 = (*itr_1).second.value;
             T value_2 = (*itr_2).second.value;
-            ostr <<"№"<< (*itr).second.id << " " << (*itr).second.first_v <<'('<<value_1<<')'<< "-" << (*itr).second.second_v <<'('<<value_2<<')'<<" : "<< (*itr).second.weight<<'\n';
+            ostr <<"№"<< (*itr).second.id << " " << (*itr).second.first_v <<'('<<value_1<<')'<< "-" << (*itr).second.second_v <<
+                                                                          '('<<value_2<<')'<<" : "<< (*itr).second.weight<<'\n';
         }
         typename map <int, Vetex<T> >::const_iterator itr_vtx;
         for (itr_vtx = gr.map_vtx.begin(); itr_vtx != gr.map_vtx.end(); ++itr_vtx){
@@ -194,7 +196,7 @@ template < typename T, typename U>
              typename list_adjacency::iterator itr_j;
              itr_j = (*itr_id).second.list_as_finish.begin();
              for (; itr_j != (*itr_id).second.list_as_finish.end(); ++itr_j) {
-                 map_edg.erase((((_id + (*itr_j))* (_id + (*itr_j)) + 3 * _id + (*itr_j))/2));
+                 map_edg.erase(((((*itr_j)+ _id)* ((*itr_j) + _id) + 3 * (*itr_j)+ _id)/2));
              }
              return true;
          }
@@ -312,7 +314,7 @@ template < typename T, typename U>
                for (; itr_i != (*itr).second.list_as_finish.end(); ++itr_i) {
                    typename map <int, Edge<U> >::iterator itr_id;
                    int id_2 = (*itr_i);
-                   itr_id = map_edg.find((((id + (id_2))* (id + (id_2)) + 3 * id + (id_2))/2));
+                   itr_id = map_edg.find((((id_2 + id)* (id_2 + id) + 3 * id_2 + (id))/2));
                    answer.push_back((*itr_id).second);
                }
                return answer;
