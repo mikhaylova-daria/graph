@@ -1,9 +1,19 @@
 //#include <iostream>
 #include "graph.h"
 using namespace std;
+template <typename T>
+struct my_show {
+    void operator() (T x) {
+        std::cout << x;
+        return;
+    }
+};
+
 
 int main()
 {
+    struct my_show<Vetex<int> > show_vtx;
+    struct my_show <Edge<int> > show_edg;
 //    Vetex <int> b, c;
 //    cin>>b;
 //    cout<<b;
@@ -24,8 +34,24 @@ int main()
     cout<<x<<'\n';
     x.transpose();
     cout<<x;
+
     list<Vetex<int> > list_vtx;
+    cout<<"\nx.get_vetices:\n";
     list_vtx = x.get_vetices();
+    for_each(list_vtx.begin(), list_vtx.end(), show_vtx);
+
+    cout<<"\nx.get_vetices_inbox:\n";
+    list_vtx = x.get_vetices_inbox(1);
+    for_each(list_vtx.begin(), list_vtx.end(), show_vtx);
+
+    cout<<"\nx.get_vetices_outbox:\n";
+    list_vtx = x.get_vetices_outbox(1);
+    for_each(list_vtx.begin(), list_vtx.end(), show_vtx);
+
+    list<Edge<int> > list_edg;
+    list_edg = x.get_edges();
+    for_each(list_edg.begin(), list_edg.end(), show_edg);
+
     return 0;
 }
 

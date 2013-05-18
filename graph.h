@@ -233,21 +233,46 @@ template < typename T, typename U>
    template < typename T, typename U>
           std::list<Vetex<T> > Graph<T, U>::get_vetices_outbox(int id){
              typename map <int, Vetex<T> > ::iterator itr;
+              std::list<Vetex<T> > answer;
               itr = map_vtx.find(id);
-              std::list<Vetex<T> > answer((*itr).second.list_as_start.begin(), (*itr).second.list_as_start.end());
+              if (itr == map_vtx.end()) {
+                  cout << "unknown_vetex\n";
+                  return answer;
+              }
+
+              list_adjacency::iterator itr_i;
+              itr_i= (*itr).second.list_as_start.begin();
+              for (; itr_i != (*itr).second.list_as_start.end(); ++itr_i) {
+                  typename map <int, Vetex<T> >::iterator itr_id;
+                  itr_id = map_vtx.find(*itr_i);
+                  answer.push_back((*itr_id).second);
+              }
               return answer;
           }
 
    template < typename T, typename U>
           std::list<Vetex<T> > Graph<T, U>::get_vetices_inbox(int id){
-              typename map <int, Vetex<T> > ::iterator itr;
-               itr = map_vtx.find(id);
-               std::list<Vetex<T> > answer((*itr).second.list_as_finish.begin(), (*itr).second.list_as_finish.end());
-               return answer;
+             typename map <int, Vetex<T> > ::iterator itr;
+              std::list<Vetex<T> > answer;
+              itr = map_vtx.find(id);
+              if (itr == map_vtx.end()) {
+                  cout << "unknown_vetex\n";
+                  return answer;
+              }
+
+              list_adjacency::iterator itr_i;
+              itr_i= (*itr).second.list_as_finish.begin();
+              for (; itr_i != (*itr).second.list_as_finish.end(); ++itr_i) {
+                  typename map <int, Vetex<T> >::iterator itr_id;
+                  itr_id = map_vtx.find(*itr_i);
+                  answer.push_back((*itr_id).second);
+              }
+              return answer;
           }
 
- /*  template < typename T, typename U>
+  /* template < typename T, typename U>
           std::list<Edge<U> > Graph<T, U>::get_edges_outbox(int id){
+
 
           }
 
