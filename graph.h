@@ -6,6 +6,8 @@
 #include <set>
 #include <algorithm>
 #include <list>
+#include <queue>
+#include <vector>
 using namespace std;
 template <typename U> struct Edge;
 template <typename T> struct Vetex;
@@ -81,6 +83,7 @@ template < typename T, typename U> class Graph
     map <int, Edge<U> > map_edg; // id ребра, начала, конца, вес
 
 public:
+    class iterator_BFS;
     Graph(){;}
 
     bool add_vtx(const Vetex <T> &_vtx);
@@ -331,5 +334,75 @@ template < typename T, typename U>
                   }
                   return answer;
               }
+
+   template < typename T, typename U >
+          class Graph<T, U>::iterator_BFS {
+              Graph <T, U> * gr;
+              vector <Vetex<T> *>  tree_BFS;
+              typename vector <Vetex<T> *>::iterator current;
+
+          public :
+                  iterator_BFS(){}
+                  iterator_BFS(Graph<T, U> * _gr,int id):gr(_gr) {
+                       Vetex <T> * p_vtx;
+                       queue <int> gray;
+                       typename map <int, Vetex<T> >::iterator itr;
+                       itr = gr->map_vtx.find(id);
+                       p_vtx =& (itr->second);
+                       tree_BFS.push_back(p_vtx); // первая пойденнная вершина
+                       gray.push(p_vtx->id);
+                       while (!gray.empty()) {
+                           int current_first_gray = gray.front();
+                           gray.pop();
+                           itr = gr->map_vtx.find(current_first_gray);
+                           list_adjacency list_as_start_of_current_gray_vtx = itr->second.list_as_start;
+                           list_adjacency::iterator itr_i;
+                           for (itr_i = list_as_start_of_current_gray_vtx.begin(); itr_i != list_as_start_of_current_gray_vtx.end(); ++itr_i){
+                               typename map <int, Vetex<T> >::iterator itr_j;
+                               itr_j = gr->map_vtx.find(*itr_i);
+                               p_vtx = & (itr_j->second);
+                               typename vector <Vetex<T> *>::iterator vector_iterator;
+                               vector_iterator = find(tree_BFS.begin(), tree_BFS.end(), p_vtx);
+                               if (vector_iterator == tree_BFS.end()) { // если её ещё нет в дереве, значит вершина белая
+                                   tree_BFS.push_back(p_vtx);
+                                   gray.push(p_vtx->id);
+                               }
+                           }
+                       }
+                       current = tree_BFS.begin(); // поставили текущую вершину на начало
+                  }
+                  iterator_BFS& operator++(){
+                      ++current;
+                      return (*this);
+                  }
+
+                  Vetex<T> & operator*() const
+                  {
+                     return (**current);
+                  }
+
+                  iterator_BFS begin() {
+                      iterator_BFS x(*this);
+                       x.current = tree_BFS.begin();
+                      return x;
+                  }
+
+                  iterator_BFS end() {
+                      iterator_BFS x(*this);
+                       x.current = tree_BFS.end();
+                      return x;
+                  }
+
+
+                  iterator_BFS (const iterator_BFS &itr): gr(itr.gr),  tree_BFS(itr.tree_BFS), current(itr.current){}
+
+                  bool operator == (const iterator_BFS &itr) const
+                  { return ((*current) == (*itr.current)); }
+
+                  bool operator != (const iterator_BFS &itr) const
+                  { return !(itr == *this); }
+
+          };
+
 
 #endif // GRAPH_H
