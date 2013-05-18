@@ -431,9 +431,6 @@ template < typename T, typename U>
 
                  public :
                          iterator_DFS(Graph<T, U> * _gr):gr(_gr) {
-//                              Vetex <T> * p_vtx;
-//                              list_adjacency list_as_start_of_current_gray_vtx = p_vtx->list_as_start;
-//                              list_adjacency::iterator itr_i;
                               typename map<int, Vetex<T> >::iterator itr_i;
                               for (itr_i = gr->map_vtx.begin(); itr_i != gr->map_vtx.end(); ++itr_i){
                                   Vetex<T> * p_vtx = & (itr_i->second);

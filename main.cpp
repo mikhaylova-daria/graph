@@ -93,14 +93,14 @@ int main()
 
     cout<<"\ncout<<\n";
     cout<<x<<'\n';
-
+    cout <<"\n обход BFS:\n";
     Graph<char, int>::iterator_BFS itr_BFS(&x, 2);
     for (;itr_BFS != itr_BFS.end(); ++itr_BFS)
     {
             cout<<(*itr_BFS);
     }
 
-    cout << "\n";
+    cout << "\nобход DFS:\n";
     Graph<char, int>::iterator_DFS itr_DFS(&x);
     for (;itr_DFS != itr_DFS.end(); ++itr_DFS)
     {
